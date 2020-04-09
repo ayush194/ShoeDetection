@@ -2,12 +2,12 @@ import numpy as np
 import tensorflow as tf
 import keras.applications
 import keras.callbacks
-from augmenter import augment
+from augmenter import *
 from constants import *
 from loss_funcs import *
 from model import MobileNetv2
 
-def train(x, y, n_outputs, loss_func):
+def train(x, y, n_outputs, loss_func, aug_func):
     n_train_dpts = int(split_ratio * 17000)
     # split x and y into train and validation sets
     x_train = x[:n_train_dpts, :]
@@ -24,8 +24,8 @@ def train(x, y, n_outputs, loss_func):
     with tf.device('/gpu:0'):
         for i in range(0, 180, 10):
             # rotate x_train and y_train[:2] by i degrees
-            x_train_aug, y_train_aug = augment(x_train, y_train, i)
-            x_valid_aug, y_valid_aug = augment(x_valid, y_valid, i)
+            x_train_aug, y_train_aug = aug_func(x_train, y_train, i)
+            x_valid_aug, y_valid_aug = aug_func(x_valid, y_valid, i)
             model.fit(x_train_aug, y_train_aug, validation_data=(x_valid_aug, y_valid_aug), epochs=2, batch_size=32, verbose=2, callbacks=callbacks_list)
     model.save("bb.h5")
     valid_score = model.evaluate(x_valid, y_valid, verbose=0)
@@ -36,12 +36,12 @@ if __name__ == "__main__":
     # for regressing bounding boxes
     x = np.load("data/x.npy")
     y = np.load("data/y.npy")
-    train(x, y, 10, myLoss)
+    train(x, y, 10, myLoss, augment)
 
     # for regressing keypoints inside the bounding box
     # x_cropped = np.load("data/x_cropped.npy")
     # y_keypts = np.load("data/y_keypts.npy")
-    # train(x_cropped, y_keypts[:, 2:], 50, 'mean_squared_error')
+    # train(x_cropped, y_keypts[:, 2:], 50, 'mean_squared_error', augment2)
     
 
 

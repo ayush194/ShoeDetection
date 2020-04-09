@@ -9,12 +9,16 @@ from model import MobileNetv2
 
 def train(x, y, n_outputs, loss_func):
     n_train_dpts = int(split_ratio * 17000)
+    # split x and y into train and validation sets
     x_train = x[:n_train_dpts, :]
     y_train = y[:n_train_dpts, :]
     x_valid = x[n_train_dpts:17000, :]
     y_valid = y[n_train_dpts:17000, :]
+    # instantiate the pretrained model
     model = MobileNetv2(n_outputs, loss_func)
+    # model savename upon callback
     filepath = "saved-model-{epoch:02d}-{val_loss:.2f}.h5"
+    # callback to save model when loss reaches runnning minima
     checkpoint = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
     callbacks_list = [checkpoint]
     with tf.device('/gpu:0'):
@@ -29,11 +33,16 @@ def train(x, y, n_outputs, loss_func):
 
 
 if __name__ == "__main__":
-    x = np.load("x.npy")
-    y = np.load("y.npy")
-    # x_cropped = np.load("x_cropped.npy")
-    # y_keypts = np.load("y_keypts.npy")
+    # for regressing bounding boxes
+    x = np.load("data/x.npy")
+    y = np.load("data/y.npy")
     train(x, y, 10, myLoss)
+
+    # for regressing keypoints inside the bounding box
+    # x_cropped = np.load("data/x_cropped.npy")
+    # y_keypts = np.load("data/y_keypts.npy")
+    # train(x_cropped, y_keypts, 52, myLoss2)
+    
 
 
 

@@ -13,7 +13,7 @@ def saveData():
             # check if we have an image URL
             if splitted_line[1] != '' and splitted_line[1] != "\n" and splitted_line[1] != "url":
                 if (splitted_line[0] == '17037'):
-                    # this url contains a ',' inside the url, hence need to take care of it
+                    # this url contains a ',' inside the url, hence need to take care of it separately
                     splitted_line[1] = splitted_line[1][1:] + ',' + splitted_line[2][:-1]
                     del splitted_line[2]
                 # if (i >= 15264):

@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw
+from PIL import Image
 import numpy as np
 from constants import *
 
@@ -6,6 +6,8 @@ def preprocess(save_file=True):
 	train_data = np.load("data/train_data.npy")
 
 	# format train_data
+	# x, y contain the images and boundingbox coordinates for regression
+	# x_cropped, y_keypts contain the cropped images and the keypoints to be regressed
 	y = []
 	y_keypts = []
 	x = []
@@ -22,6 +24,7 @@ def preprocess(save_file=True):
 	    x.append(np.array(Image.open(image_paths[i]).convert('RGB').resize((img_size_red, img_size_red)),
 	    						dtype=np.float32).reshape(img_size_red, img_size_red, 3) / 255.0)
 
+	    # unnormalized bounding box coordinates
 	    bb_coords = [t * img_size for i in bb_coords_norm]
 	    for j in range(2):
 	    	# j == 0 -> left shoe
@@ -43,15 +46,16 @@ def preprocess(save_file=True):
 				img_new.paste(img, img.getbbox())  # Not centered, top-left corner
 		    	x_cropped.append(np.array(img_new, dtype=np.float32).reshape(img_size_cropped, img_size_cropped, 3) / 255.0)
 	
+	# convert all lists to np arrays
 	y = np.array(y, dtype=np.float32)
 	y_keypts = np.array(y_keypts, dtype=np.float32)
 	x = np.array(x, dtype=np.float32)
 	x_cropped = np.array(x_cropped, dtype=np.float32)
 	if (save_file):
-		np.save("x.npy", x)
-		np.save("y.npy", y)
-		np.save("x_cropped.npy", x_cropped)
-		np.save("y_keypts.npy", y_keypts)
+		np.save("data/x.npy", x)
+		np.save("data/y.npy", y)
+		np.save("data/x_cropped.npy", x_cropped)
+		np.save("data/y_keypts.npy", y_keypts)
 	return x, y, x_cropped, y_keypts
 
 if __name__ == "__main__":

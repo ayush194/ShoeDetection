@@ -6,6 +6,8 @@ num_img = 17019
 img_size = 512
 # we will downscale the images to 224 x 224
 img_size_red = 224
+# crop the image
+img_size_cropped = 224
 # training : validation datapoints
 split_ratio = 0.8
 

@@ -7,15 +7,13 @@ from constants import *
 from loss_funcs import *
 from model import MobileNetv2
 
-def train():
-    x = np.load("x.npy")
-    y = np.load("y.npy")
+def train(x, y, n_outputs, loss_func):
     n_train_dpts = int(split_ratio * 17000)
     x_train = x[:n_train_dpts, :]
     y_train = y[:n_train_dpts, :]
     x_valid = x[n_train_dpts:17000, :]
     y_valid = y[n_train_dpts:17000, :]
-    model = MobileNetv2(10, myLoss)
+    model = MobileNetv2(n_outputs, loss_func)
     filepath = "saved-model-{epoch:02d}-{val_loss:.2f}.h5"
     checkpoint = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
     callbacks_list = [checkpoint]
@@ -28,6 +26,14 @@ def train():
     model.save("bb.h5")
     valid_score = model.evaluate(x_valid, y_valid, verbose=0)
     print('Validation loss:', valid_score)
+
+
+if __name__ == "__main__":
+    x = np.load("x.npy")
+    y = np.load("y.npy")
+    # x_cropped = np.load("x_cropped.npy")
+    # y_keypts = np.load("y_keypts.npy")
+    train(x, y, 10, myLoss)
 
 
 

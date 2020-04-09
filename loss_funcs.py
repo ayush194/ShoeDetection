@@ -1,5 +1,5 @@
 import keras.losses as losses
-import tensorflow.multiply as tf.multiply
+import tensorflow as tf
 
 def myLoss(ytrue,ypred):
     true_box_prob = ytrue[:,:2]

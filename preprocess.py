@@ -1,4 +1,3 @@
-import os
 from PIL import Image, ImageDraw
 import numpy as np
 from constants import *

@@ -23,7 +23,7 @@ def saveData():
                 i += 1
             else:
                 print("No result for {0}".format(splitted_line[0]))
-        # print(i)
+        print(str(i) + " datapoints retrieved")
 
     train_data = np.array(train_data)
     np.save("data/train_data.npy", train_data)

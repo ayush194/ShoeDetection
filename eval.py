@@ -8,13 +8,13 @@ def eval2():
     # check how well the keypoint regression model performs
     x_cropped = np.load("data/x_cropped.npy")
     y_keypts = np.load("data/y_keypts.npy")
-    model = keras.models.load_model("saved-model-11-0.69.h5")
+    model = keras.models.load_model("models/saved-model-11-0.00.h5")
     # note that in this case the indices of x_cropped may not correspond to the image id
     # since some images contain two shoes for which we have two datapoints
     id = 11000
     img = x_cropped[id]
     y_keypts_pred = model.predict(img.reshape(1, img_size_cropped, img_size_cropped, 3))[0]
-    img = img * 255.0
+    img = Image.fromarray(np.uint8(img * 255.0))
     print(y_keypts_pred)
     print(y_keypts[id])
     y_keypts_pred = y_keypts_pred * img_size_cropped
@@ -28,7 +28,7 @@ def eval2():
 def eval1():
     # test how well the bounding box model performs
     y = np.load("data/y.npy")
-    model = keras.models.load_model("saved-model-11-0.69.h5", custom_objects={'myLoss': myLoss})
+    model = keras.models.load_model("models/saved-model-11-0.69.h5", custom_objects={'myLoss': myLoss})
     img_id = 11000
     test_img_path = image_paths[img_id]
     img = Image.open(test_img_path)

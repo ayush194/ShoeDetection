@@ -26,7 +26,7 @@ def train(x, y, n_outputs, loss_func):
             # rotate x_train and y_train[:2] by i degrees
             x_train_aug, y_train_aug = augment(x_train, y_train, i)
             x_valid_aug, y_valid_aug = augment(x_valid, y_valid, i)
-            model.fit(x_train_aug, y_train_aug, validation_data=(x_valid_aug, y_valid_aug), epochs=2, batch_size=8, verbose=2, callbacks=callbacks_list)
+            model.fit(x_train_aug, y_train_aug, validation_data=(x_valid_aug, y_valid_aug), epochs=2, batch_size=32, verbose=2, callbacks=callbacks_list)
     model.save("bb.h5")
     valid_score = model.evaluate(x_valid, y_valid, verbose=0)
     print('Validation loss:', valid_score)
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     # for regressing keypoints inside the bounding box
     # x_cropped = np.load("data/x_cropped.npy")
     # y_keypts = np.load("data/y_keypts.npy")
-    # train(x_cropped, y_keypts, 52, myLoss2)
+    # train(x_cropped, y_keypts[:, 2:], 50, 'mean_squared_error')
     
 
 

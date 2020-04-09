@@ -8,7 +8,7 @@ def eval2():
     # check how well the keypoint regression model performs
     x_cropped = np.load("data/x_cropped.npy")
     y_keypts = np.load("data/y_keypts.npy")
-    model = keras.models.load_model("saved-model-11-0.69.h5", custom_objects={'myLoss2': myLoss2})
+    model = keras.models.load_model("saved-model-11-0.69.h5")
     # note that in this case the indices of x_cropped may not correspond to the image id
     # since some images contain two shoes for which we have two datapoints
     id = 11000

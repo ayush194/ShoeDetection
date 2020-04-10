@@ -27,7 +27,7 @@ def eval2(id):
 def eval1(img_id):
     # test how well the bounding box model performs
     y = np.load("data/y.npy")
-    model = keras.models.load_model("models/saved-model-11-0.69.h5", custom_objects={'myLoss': myLoss})
+    model = keras.models.load_model("models/saved-model-03-0.53.h5", custom_objects={'myLoss': myLoss})
     test_img_path = image_paths[img_id]
     img = Image.open(test_img_path)
     img_ = np.array(img.convert('RGB').resize((img_size_red, img_size_red)), dtype=np.float16).reshape((1, img_size_red, img_size_red, 3)) / 255.0

@@ -37,7 +37,7 @@ def train(x, y, n_outputs, loss_func, aug_func):
             # x_valid_aug, y_valid_aug = augment(x_valid, y_valid, i)
             model.fit(x_train_curr, y_train_curr, validation_data=(x_valid_curr, y_valid_curr), epochs=5, batch_size=64, verbose=2, callbacks=callbacks_list)
             data_aug_thread1.join()
-            data_aug_thread1.join()
+            data_aug_thread2.join()
             x_train_curr, y_train_curr = x_train_next, y_train_next
             x_valid_curr, y_valid_curr = x_valid_next, y_valid_next
     model.save("bb.h5")

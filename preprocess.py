@@ -41,9 +41,11 @@ def preprocess(save_file=True):
 		    			# this is a y-coordinate of the jth foot
 		    			tmp.append(((0.5 - train_data[i][2+j*50+t].astype(np.float32)) * img_size - bb_coords[4*j+1]) / img_size)
 				y_keypts.append(tmp)
-				img = Image.open(image_paths[i]).convert('RGB').crop(bb_coords[4*j:4*(j+1)])
+				corners = bb_coords[4*j:4*(j+1)]
+            	width, height = (corners[2] - corners[0]), (corners[3] - corners[1])
+				img = Image.open(image_paths[i]).convert('RGB').crop(corners)
 				img_new = Image.new('RGB', (img_size, img_size), (0, 0, 0))  # Black
-				img_new.paste(img, (0,0))  # Not centered, top-left corner
+				img_new.paste(img, ((img_size - width) / 2, (img_size - height) / 2))  # centered
 				img_new = img_new.resize((img_size_cropped, img_size_cropped))
 		    	x_cropped.append(np.array(img_new, dtype=np.float32).reshape(img_size_cropped, img_size_cropped, 3) / 255.0)
 	

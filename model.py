@@ -10,7 +10,8 @@ def MobileNetv2(n_outputs, loss_func):
     output = keras.layers.Dense(100, activation='relu')(output)
     output = keras.layers.Dropout(0.5)(output)
     output = keras.layers.BatchNormalization()(output)
-    output = keras.layers.Dense(n_outputs, activation='relu')(output)
-    model = keras.models.Model(model.input, output)
-    model.compile(loss=loss_func, optimizer='adam', metrics=['mse'])
+    output1 = keras.layers.Dense(2, activation='softmax')(output)
+    output2 = keras.layers.Dense(8, activation='relu')(output)
+    output = keras.layers.concatenate([output1, output2])
+    model = keras.models.Model(model.input, outputs=output)
     return model
